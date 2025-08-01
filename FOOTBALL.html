@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akinlotan Football Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Montserrat:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            overflow-x: hidden;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .game-title {
+            font-family: 'Bungee', cursive;
+            text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            letter-spacing: 2px;
+        }
+        
+        .pitch {
+            background: #2e8b57;
+            background-image: 
+                linear-gradient(#fff 1px, transparent 1px),
+                linear-gradient(90deg, #fff 1px, transparent 1px),
+                linear-gradient(#fff 1px, transparent 1px),
+                linear-gradient(90deg, #fff 1px, transparent 1px);
+            background-size: 50px 50px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .goal {
+            background: #333;
+            border: 5px solid #fff;
+            position: absolute;
+        }
+        
+        .player {
+            position: absolute;
+            border-radius: 50%;
+            transition: transform 0.2s;
+            z-index: 10;
+        }
+        
+        .ball {
+            position: absolute;
+            border-radius: 50%;
+            transition: transform 0.3s cubic-bezier(.17,.67,.83,.67);
+            z-index: 5;
+        }
+        
+        .crowd {
+            position: absolute;
+            width: 100%;
+            height: 100px;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    to bottom,
+                    transparent,
+                    transparent 20px,
+                    rgba(255,255,255,0.1) 20px,
+                    rgba(255,255,255,0.1) 40px
+                );
+        }
+        
+        .animated {
+            animation: pulse 1s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+        
+        .goal-celebration {
+            animation: goalCelebration 3s ease-out;
+        }
+        
+        @keyframes goalCelebration {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .power-meter {
+            height: 30px;
+            background: linear-gradient(to right, #00ff00, #ffff00, #ff0000);
+            transition: width 0.1s;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center text-white p-4">
+    <div class="text-center mb-4">
+        <h1 class="game-title text-4xl md:text-6xl mb-2">AKINLOTAN</h1>
+        <p class="text-lg mb-4">The Ultimate Football Experience</p>
+    </div>
+
+    <div class="relative w-full max-w-3xl h-96 md:h-[500px] mb-8 pitch">
+        <!-- Goals -->
+        <div class="goal w-6 h-20 left-0 top-1/2 transform -translate-y-1/2"></div>
+        <div class="goal w-6 h-20 right-0 top-1/2 transform -translate-y-1/2"></div>
+        
+        <!-- Center circle -->
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 border-4 border-white rounded-full"></div>
+        
+        <!-- Player -->
+        <div id="player" class="player w-10 h-10 bg-blue-500 border-4 border-white shadow-lg"></div>
+        
+        <!-- Ball -->
+        <div id="ball" class="ball w-6 h-6 bg-white shadow-md"></div>
+        
+        <!-- Crowd -->
+        <div class="crowd"></div>
+    </div>
+
+    <div class="w-full max-w-3xl bg-black bg-opacity-50 rounded-lg p-4 mb-6">
+        <div class="flex justify-between items-center mb-4">
+            <div class="text-center">
+                <div class="text-xl font-bold">Player</div>
+                <div id="player-score" class="text-3xl">0</div>
+            </div>
+            <div class="text-center">
+                <div class="text-xl font-bold">Time</div>
+                <div id="game-time" class="text-3xl">90</div>
+            </div>
+            <div class="text-center">
+                <div class="text-xl font-bold">Computer</div>
+                <div id="computer-score" class="text-3xl">0</div>
+            </div>
+        </div>
+        
+        <div class="mb-4">
+            <div class="text-sm mb-1">Shot Power</div>
+            <div id="power-meter" class="power-meter w-0 h-4 mb-2"></div>
+            <button id="shoot-btn" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded font-bold">SHOOT</button>
+        </div>
+        
+        <div class="flex justify-between">
+            <button id="move-left" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded font-bold">← Move</button>
+            <button id="move-right" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded font-bold">Move →</button>
+        </div>
+    </div>
+
+    <div id="game-message" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-80 text-white text-2xl p-6 rounded-lg shadow-lg hidden text-center"></div>
+
+    <div class="text-sm text-center mt-4 opacity-75">
+        <p>Use arrow keys to move. Hold SPACE to charge shot power.</p>
+    </div>
+
+    <audio id="kick-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-football-kick-3110.mp3" preload="auto"></audio>
+    <audio id="goal-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-crowd-cheering-loop-2295.mp3" preload="auto"></audio>
+    <audio id="whistle-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-referee-whistle-1250.mp3" preload="auto"></audio>
+
+    <script>
+        // Game state
+        const gameState = {
+            playerScore: 0,
+            computerScore: 0,
+            gameTime: 90,
+            isCharging: false,
+            powerLevel: 0,
+            gameActive: true,
+            playerPosition: { x: 200, y: 250 },
+            ballPosition: { x: 300, y: 250 },
+            computerPosition: { x: 500, y: 250 },
+            direction: 1 // 1 for right, -1 for left
+        };
+
+        // DOM elements
+        const player = document.getElementById('player');
+        const ball = document.getElementById('ball');
+        const playerScoreEl = document.getElementById('player-score');
+        const computerScoreEl = document.getElementById('computer-score');
+        const gameTimeEl = document.getElementById('game-time');
+        const powerMeter = document.getElementById('power-meter');
+        const shootBtn = document.getElementById('shoot-btn');
+        const moveLeftBtn = document.getElementById('move-left');
+        const moveRightBtn = document.getElementById('move-right');
+        const gameMessage = document.getElementById('game-message');
+        const kickSound = document.getElementById('kick-sound');
+        const goalSound = document.getElementById('goal-sound');
+        const whistleSound = document.getElementById('whistle-sound');
+
+        // Pitch dimensions
+        const pitch = document.querySelector('.pitch');
+        const pitchRect = pitch.getBoundingClientRect();
+        const pitchWidth = pitchRect.width;
+        const pitchHeight = pitchRect.height;
+
+        // Initialize positions
+        updatePositions();
+
+        // Event listeners
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keyup', handleKeyUp);
+        shootBtn.addEventListener('mousedown', startCharging);
+        shootBtn.addEventListener('mouseup', shoot);
+        shootBtn.addEventListener('mouseleave', cancelCharge);
+        moveLeftBtn.addEventListener('mousedown', () => movePlayer(-1));
+        moveLeftBtn.addEventListener('mouseup', stopMoving);
+        moveRightBtn.addEventListener('mousedown', () => movePlayer(1));
+        moveRightBtn.addEventListener('mouseup', stopMoving);
+
+        // Game timer
+        const gameTimer = setInterval(() => {
+            if (gameState.gameActive) {
+                gameState.gameTime--;
+                gameTimeEl.textContent = gameState.gameTime;
+                
+                if (gameState.gameTime <= 0) {
+                    endGame();
+                }
+            }
+        }, 1000);
+
+        // Computer AI
+        setInterval(() => {
+            if (gameState.gameActive) {
+                // Simple AI - follow the ball
+                const ballCenterX = gameState.ballPosition.x + 3;
+                const computerCenterX = gameState.computerPosition.x + 5;
+                
+                if (ballCenterX > computerCenterX + 5) {
+                    gameState.computerPosition.x += 2;
+                } else if (ballCenterX < computerCenterX - 5) {
+                    gameState.computerPosition.x -= 2;
+                }
+                
+                // Keep computer within bounds
+                gameState.computerPosition.x = Math.max(10, Math.min(pitchWidth - 20, gameState.computerPosition.x));
+                
+                // Occasionally try to kick the ball
+                if (Math.random() < 0.02 && Math.abs(ballCenterX - computerCenterX) < 30) {
+                    computerKick();
+                }
+                
+                updatePositions();
+            }
+        }, 50);
+
+        function updatePositions() {
+            player.style.left = `${gameState.playerPosition.x}px`;
+            player.style.top = `${gameState.playerPosition.y}px`;
+            
+            ball.style.left = `${gameState.ballPosition.x}px`;
+            ball.style.top = `${gameState.ballPosition.y}px`;
+            
+            // Check for collisions
+            checkCollisions();
+        }
+
+        function handleKeyDown(e) {
+            if (!gameState.gameActive) return;
+            
+            switch (e.key) {
+                case 'ArrowLeft':
+                    movePlayer(-1);
+                    break;
+                case 'ArrowRight':
+                    movePlayer(1);
+                    break;
+                case ' ':
+                    startCharging();
+                    break;
+            }
+        }
+
+        function handleKeyUp(e) {
+            if (!gameState.gameActive) return;
+            
+            switch (e.key) {
+                case 'ArrowLeft':
+                case 'ArrowRight':
+                    stopMoving();
+                    break;
+                case ' ':
+                    shoot();
+                    break;
+            }
+        }
+
+        function movePlayer(direction) {
+            if (!gameState.gameActive) return;
+            
+            gameState.direction = direction;
+            const moveInterval = setInterval(() => {
+                gameState.playerPosition.x += direction;
+                
+                // Keep player within bounds
+                gameState.playerPosition.x = Math.max(10, Math.min(pitchWidth - 20, gameState.playerPosition.x));
+                
+                updatePositions();
+            }, 16);
+            
+            player.dataset.moveInterval = moveInterval;
+        }
+
+        function stopMoving() {
+            clearInterval(player.dataset.moveInterval);
+        }
+
+        function startCharging() {
+            if (!gameState.gameActive || gameState.isCharging) return;
+            
+            gameState.isCharging = true;
+            gameState.powerLevel = 0;
+            
+            const chargeInterval = setInterval(() => {
+                if (gameState.powerLevel < 100) {
+                    gameState.powerLevel++;
+                    powerMeter.style.width = `${gameState.powerLevel}%`;
+                    
+                    // Change color based on power level
+                    if (gameState.powerLevel > 80) {
+                        powerMeter.style.backgroundColor = '#ff0000';
+                    } else if (gameState.powerLevel > 50) {
+                        powerMeter.style.backgroundColor = '#ffff00';
+                    } else {
+                        powerMeter.style.backgroundColor = '#00ff00';
+                    }
+                } else {
+                    clearInterval(chargeInterval);
+                }
+            }, 20);
+            
+            powerMeter.dataset.chargeInterval = chargeInterval;
+        }
+
+        function cancelCharge() {
+            if (gameState.isCharging) {
+                clearInterval(powerMeter.dataset.chargeInterval);
+                gameState.isCharging = false;
+                powerMeter.style.width = '0%';
+            }
+        }
+
+        function shoot() {
+            if (!gameState.gameActive || !gameState.isCharging) return;
+            
+            clearInterval(powerMeter.dataset.chargeInterval);
+            gameState.isCharging = false;
+            
+            // Play kick sound
+            kickSound.currentTime = 0;
+            kickSound.play();
+            
+            // Calculate ball movement
+            const power = gameState.powerLevel / 10;
+            const angle = Math.random() * 20 - 10; // slight randomness
+            
+            gameState.ballPosition.x += power * Math.cos(angle * Math.PI / 180) * gameState.direction;
+            gameState.ballPosition.y += power * Math.sin(angle * Math.PI / 180);
+            
+            // Reset power meter
+            powerMeter.style.width = '0%';
+            
+            // Animate the ball
+            let ballInterval = setInterval(() => {
+                // Apply gravity/friction
+                gameState.ballPosition.x += power * 0.2 * gameState.direction;
+                gameState.ballPosition.y += power * 0.1;
+                
+                // Bounce off walls
+                if (gameState.ballPosition.x <= 0 || gameState.ballPosition.x >= pitchWidth - 6) {
+                    gameState.direction *= -1;
+                    gameState.ballPosition.x = Math.max(0, Math.min(pitchWidth - 6, gameState.ballPosition.x));
+                }
+                
+                // Bounce off ground
+                if (gameState.ballPosition.y >= pitchHeight - 6) {
+                    gameState.ballPosition.y = pitchHeight - 6;
+                    power *= 0.7; // Reduce power on bounce
+                }
+                
+                updatePositions();
+                
+                // Gradually reduce power
+                power *= 0.95;
+                
+                if (power < 0.5) {
+                    clearInterval(ballInterval);
+                }
+            }, 16);
+        }
+
+        function computerKick() {
+            const power = 5 + Math.random() * 5;
+            const angle = Math.random() * 20 - 10;
+            
+            gameState.ballPosition.x -= power * Math.cos(angle * Math.PI / 180);
+            gameState.ballPosition.y += power * Math.sin(angle * Math.PI / 180);
+            
+            kickSound.currentTime = 0;
+            kickSound.play();
+            
+            let ballInterval = setInterval(() => {
+                gameState.ballPosition.x -= power * 0.2;
+                gameState.ballPosition.y += power * 0.1;
+                
+                if (gameState.ballPosition.x <= 0 || gameState.ballPosition.x >= pitchWidth - 6) {
+                    gameState.ballPosition.x = Math.max(0, Math.min(pitchWidth - 6, gameState.ballPosition.x));
+                }
+                
+                if (gameState.ballPosition.y >= pitchHeight - 6) {
+                    gameState.ballPosition.y = pitchHeight - 6;
+                    power *= 0.7;
+                }
+                
+                updatePositions();
+                
+                power *= 0.95;
+                
+                if (power < 0.5) {
+                    clearInterval(ballInterval);
+                }
+            }, 16);
+        }
+
+        function checkCollisions() {
+            // Player-ball collision
+            const playerRect = player.getBoundingClientRect();
+            const ballRect = ball.getBoundingClientRect();
+            
+            if (isColliding(playerRect, ballRect)) {
+                // Push ball away from player
+                const dx = ballRect.left + ballRect.width/2 - (playerRect.left + playerRect.width/2);
+                const dy = ballRect.top + ballRect.height/2 - (playerRect.top + playerRect.height/2);
+                
+                gameState.ballPosition.x += dx * 0.2;
+                gameState.ballPosition.y += dy * 0.2;
+            }
+            
+            // Goal checks
+            const goals = document.querySelectorAll('.goal');
+            goals.forEach(goal => {
+                const goalRect = goal.getBoundingClientRect();
+                
+                if (isColliding(ballRect, goalRect)) {
+                    scoreGoal(goal.classList.contains('left') ? 'computer' : 'player');
+                }
+            });
+        }
+
+        function isColliding(rect1, rect2) {
+            return !(
+                rect1.right < rect2.left || 
+                rect1.left > rect2.right || 
+                rect1.bottom < rect2.top || 
+                rect1.top > rect2.bottom
+            );
+        }
+
+        function scoreGoal(scorer) {
+            if (!gameState.gameActive) return;
+            
+            // Play goal sound
+            goalSound.currentTime = 0;
+            goalSound.play();
+            
+            if (scorer === 'player') {
+                gameState.playerScore++;
+                playerScoreEl.textContent = gameState.playerScore;
+                showMessage('GOAL!', 'text-green-400');
+            } else {
+                gameState.computerScore++;
+                computerScoreEl.textContent = gameState.computerScore;
+                showMessage('Opponent Scores!', 'text-red-400');
+            }
+            
+            // Reset ball position
+            gameState.ballPosition = { x: pitchWidth / 2 - 3, y: pitchHeight / 2 - 3 };
+            updatePositions();
+            
+            // Add celebration animation
+            pitch.classList.add('goal-celebration');
+            setTimeout(() => {
+                pitch.classList.remove('goal-celebration');
+            }, 3000);
+        }
+
+        function showMessage(text, colorClass) {
+            gameMessage.textContent = text;
+            gameMessage.className = `fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-80 text-white text-2xl p-6 rounded-lg shadow-lg ${colorClass} text-center`;
+            gameMessage.classList.remove('hidden');
+            
+            setTimeout(() => {
+                gameMessage.classList.add('hidden');
+            }, 2000);
+        }
+
+        function endGame() {
+            gameState.gameActive = false;
+            clearInterval(gameTimer);
+            
+            whistleSound.currentTime = 0;
+            whistleSound.play();
+            
+            let resultMessage = '';
+            if (gameState.playerScore > gameState.computerScore) {
+                resultMessage = 'You Win!';
+                showMessage(`Victory! ${gameState.playerScore}-${gameState.computerScore}`, 'text-yellow-400 animated');
+            } else if (gameState.playerScore < gameState.computerScore) {
+                resultMessage = 'You Lose!';
+                showMessage(`Defeat! ${gameState.computerScore}-${gameState.playerScore}`, 'text-red-400');
+            } else {
+                resultMessage = 'Draw!';
+                showMessage(`Tie Game! ${gameState.playerScore}-${gameState.computerScore}`, 'text-white');
+            }
+            
+            // Show restart option
+            setTimeout(() => {
+                showMessage(`${resultMessage} Click to play again.`, 'text-white cursor-pointer');
+                gameMessage.addEventListener('click', restartGame);
+            }, 3000);
+        }
+
+        function restartGame() {
+            gameState.playerScore = 0;
+            gameState.computerScore = 0;
+            gameState.gameTime = 90;
+            gameState.gameActive = true;
+            
+            playerScoreEl.textContent = '0';
+            computerScoreEl.textContent = '0';
+            gameTimeEl.textContent = '90';
+            
+            //

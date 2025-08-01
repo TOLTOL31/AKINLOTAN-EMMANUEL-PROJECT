@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKINLOTAN - Social Media Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --danger: #ef4444;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        
+        body.dark {
+            background-color: var(--dark);
+            color: var(--light);
+        }
+        
+        .post-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-slate-800">
+    <!-- Header/Navigation -->
+    <header class="bg-white dark:bg-slate-900 shadow-md sticky top-0 z-10">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <h1 class="text-2xl font-bold text-blue-500">AKINLOTAN</h1>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="#" class="text-slate-700 dark:text-slate-300 hover:text-blue-500">Home</a>
+                <a href="#" class="text-slate-700 dark:text-slate-300 hover:text-blue-500">Explore</a>
+                <a href="#" class="text-slate-700 dark:text-slate-300 hover:text-blue-500">Notifications</a>
+                <a href="#" class="text-slate-700 dark:text-slate-300 hover:text-blue-500">Messages</a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-700 dark:text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </button>
+                
+                <div class="relative">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/40af5f6e-4c18-418d-83fc-f7ad2897fc22.png" alt="User profile picture - smiling young African male with short hair in casual attire" class="w-8 h-8 rounded-full cursor-pointer" id="profile-menu">
+                    <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-md shadow-lg py-1 z-20">
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-slate-700">Profile</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-slate-700">Settings</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-slate-700">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6 flex flex-col md:flex-row gap-6">
+        <!-- Sidebar -->
+        <aside class="sidebar w-full md:w-64 bg-white dark:bg-slate-900 rounded-lg shadow-md p-4 h-fit sticky top-20">
+            <div class="flex items-center space-x-3 mb-6">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/11f0af9d-a40e-4a6f-9496-14d77f7c95c5.png" alt="Current user profile picture - young professional man with stylish glasses and confident expression" class="w-12 h-12 rounded-full">
+                <div>
+                    <h3 class="font-semibold">EMMANUEL Akinlotan</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">@seunakin</p>
+                </div>
+            </div>
+            
+            <nav>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            <span>Explore</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                            </svg>
+                            <span>Notifications</span>
+                            <span class="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">3</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                            <span>Messages</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="mt-6">
+                <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Trending</h3>
+                <ul class="space-y-3">
+                    <li>
+                        <a href="#" class="text-sm hover:text-blue-500">#TechWednesday</a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-sm hover:text-blue-500">#NaijaToTheWorld</a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-sm hover:text-blue-500">#AfricanCreatives</a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        
+        <!-- Main Feed -->
+        <div class="flex-1">
+            <!-- Create Post -->
+            <div class="bg-white dark:bg-slate-900 rounded-lg shadow-md p-4 mb-6">
+                <div class="flex items-start space-x-3">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ddfa1ff7-121a-4525-ab9d-287ea97a5164.png" alt="Current user profile thumbnail - smiling young man with stylish haircut" class="w-10 h-10 rounded-full mt-1">
+                    
+                    <div class="flex-1">
+                        <textarea id="post-content" class="w-full border border-gray-200 dark:border-slate-700 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-800" placeholder="What's happening today?" rows="2"></textarea>
+                        
+                        <!-- Media Upload Options -->
+                        <div class="flex items-center justify-between mt-3">
+                            <div class="flex space-x-3">
+                                <button class="text-blue-500 hover:text-blue-600" id="upload-image-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </button>
+                                
+                                <button class="text-green-500 hover:text-green-600" id="upload-video-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                    </svg>
+                                </button>
+                                
+                                <input type="file" id="media-upload" class="hidden" accept="image/*,video/*">
+                            </div>
+                            
+                            <button id="post-submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full font-medium disabled:opacity-50" disabled>Post</button>
+                        </div>
+                        
+                        <!-- Preview Area -->
+                        <div id="media-preview" class="mt-3 hidden">
+                            <div class="relative rounded-lg overflow-hidden bg-gray-100 dark:bg-slate-700">
+                                <button id="remove-media" class="absolute top-2 right-2 bg-white dark:bg-slate-800 rounded-full p-1 shadow-lg hover:bg-gray-200 dark:hover:bg-slate-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                                <div id="media-container" class="flex justify-center items-center"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Posts Feed -->
+            <div id="posts-feed" class="space-y-6">
+                <!-- Sample Post 1 - Image -->
+                <div class="post-card bg-white dark:bg-slate-900 rounded-lg shadow-md p-4 transition-all duration-200">
+                    <div class="flex items-start space-x-3">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ff9463de-26fb-4f99-a09e-2af88caca0b5.png" alt="User profile - young African woman with natural hair and bright smile" class="w-10 h-10 rounded-full">
+                        
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="font-semibold">Amina Hassan</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">@aminah • 2h ago</p>
+                                </div>
+                                
+                                <button class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <p class="mt-2">Beautiful sunset in Lagos today! The sky was absolutely breathtaking.</p>
+                            
+                            <div class="mt-3 rounded-lg overflow-hidden">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/48764b3e-ebbf-4145-911e-3a26b307c757.png" alt="Lagos sunset with vibrant orange and purple hues reflecting on high-rise buildings and water" class="w-full">
+                            </div>
+                            
+                            <div class="flex justify-between mt-3 text-gray-500 dark:text-gray-400">
+                                <button class="flex items-center space-x-1 hover:text-blue-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                    </svg>
+                                    <span>24</span>
+                                </button>
+                                
+                                <button class="flex items-center space-x-1 hover:text-green-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                    </svg>
+                                    <span>12</span>
+                                </button>
+                                
+                                <button class="flex items-center space-x-1 hover:text-red-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                    <span>56</span>
+                                </button>
+                                
+                                <button class="flex items-center space-x-1 hover:text-blue-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                                    </svg>
+                                    <span>Share</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sample Post 2 - Video -->
+                <div class="post-card bg-white dark:bg-slate-900 rounded-lg shadow-md p-4 transition-all duration-200">
+                    <div class="flex items-start space-x-3">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7d104221-b9b3-4e63-9b7f-4ed5479be765.png" alt="User profile - African man with beard wearing glasses and looking professional" class="w-10 h-10 rounded-full">
+                        
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="font-semibold">Tunde Adebayo</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">@tundeade • 4h ago</p>
+                                </div>
+                                
+                                <button class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <p class="mt-2">Just launched my new tech startup! Here's a short video explaining what we do.</p>
+                            
+                            <div class="mt-3 rounded-lg overflow-hidden bg-gray-200 dark:bg-slate-700">
+                                <div class="video-container">
+                                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between mt-3 text-gray-500 dark:text-gray-400">
+                                <button class="flex items-center space-x-1 hover:text-blue-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                    </svg>
+                                    <span>18</span>
+                                </button>
+                                
+                                <button class="flex items-center space-x-1 hover:text-green-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                    </svg>
+                                    <span>6</span>
+                                </button>
+                                
+                                <button class="flex items-center space-x-1 hover:text-red-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                    <span>43</span>
+                                </button>
+                                
+                                <button class="flex items-center space-x-1 hover:text-blue-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                                    </svg>
+                                    <span>Share</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sample Post 3 - Text Only -->
+                <div class="post-card bg-white dark:bg-slate-900 rounded-lg shadow-md p-4 transition-all duration-200">
+                    <div class="flex items-start space-x-3">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/928b04cc-2834-4daf-9cae-7327e7252ece.png" alt="User profile - elderly African woman with wisdom in her eyes and colorful headwrap" class="w-10 h-10 rounded-full">
+                        
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="font-semibold">Mama Ngozi</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">@mamangozi • 6h ago</p>
+                                </div>
+                                
+                                <button class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <p class="mt-2">Today I was thinking about how important it is to preserve our African traditions while embracing modernity. The wisdom of our ancestors combined with the opportunities of today's world is a powerful combination ❤️ #AfricanWisdom #TraditionAndModernity</p>
+                            
+                            <div class="flex justify-between mt-3 text-gray-500 dark:text-gray-400">
+                                <button class="flex items-center space-x-1 hover:text-blue-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                    </svg>
+                                    <span>32</span>
+                                </button>
+                                
+                                <button class="flex items-center space-x-1 hover:text-green-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                    </svg>
+                                    <span>8</span>
+                                </button>
+                                
+                                <button class="flex items-center space-x-1 hover:text-red-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                    <span>78</span>
+                                </button>
+                                
+                                <button class="flex items-center space-x-1 hover:text-blue-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                                    </svg>
+                                    <span>Share</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Sidebar -->
+        <aside class="hidden lg:block w-80 bg-white dark:bg-slate-900 rounded-lg shadow-md p-4 h-fit sticky top-20">
+            <h2 class="text-xl font-bold mb-4">Trending in Nigeria</h2>
+            
+            <div class="space-y-4">
+                <div class="trending-item">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Trending in Nigeria</p>
+                    <h3 class="font-medium">#JollofWars</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">5,024 posts</p>
+                </div>
+                
+                <div class="trending-item">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Technology · Trending</p>
+                    <h3 class="font-medium">#TechInAfrica</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">3,856 posts</p>
+                </div>
+                
+                <div class="trending-item">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Business & finance · Trending</p>
+                    <h3 class="font-medium">Nigeria's GDP</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">2,987 posts</p>
+                </div>
+                
+                <div class="trending-item">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Music · Trending</p>
+                    <h3 class="font-medium">Burna Boy</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">8,245 posts</p>
+                </div>
+            </div>
+            
+            <div class="mt-8">
+                <h2 class="text-xl font-bold mb-4">Who to follow</h2>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/bcf50892-8b29-4f67-8781-9d383bb3d61a.png" alt="Profile of Chioma Okeke - influential African entrepreneur with stylish afro hairstyle" class="w-10 h-10 rounded-full">
+                            
+                            <div>
+                                <h3 class="font-medium">Chioma Okeke</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">@chiomax</p>
+                            </div>
+                        </div>
+                        
+                        <button class="bg-black dark:bg-white text-white dark:text-black px-3 py-1 rounded-full text-sm font-medium">Follow</button>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0b77fe0c-8cf4-4506-bfac-0d303dcad612.png" alt="Profile of Eniola Aluko - sports commentator wearing a blazer and confident expression" class="w-10 h-10 rounded-full">
+                            
+                            <div>
+                                <h3 class="font-medium">Eniola Aluko</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">@eniola_aluko</p>
+                            </div>
+                        </div>
+                        
+                        <button class="bg-black dark:bg-white text-white dark:text-black px-3 py-1 rounded-full text-sm font-medium">Follow</button>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/bb618578-4a2d-49d8-9115-372ad218984a.png" alt="Profile of Kofi Mensah - tech innovator with glasses and friendly smile" class="w-10 h-10 rounded-full">
+                            
+                            <div>
+                                <h3 class="font-medium">Kofi Mensah</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">@kofi_tech</p>
+                            </div>
+                        </div>
+                        
+                        <button class="bg-black dark:bg-white text-white dark:text-black px-3 py-1 rounded-full text-sm font-medium">Follow</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 text-xs text-gray-500 dark:text-gray-400">
+                <div class="flex flex-wrap gap-2">
+                    <a href="#" class="hover:underline">Terms of Service</a>
+                    <a href="#" class="hover:underline">Privacy Policy</a>
+                    <a href="#" class="hover:underline">Cookie Policy</a>
+                    <a href="#" class="hover:underline">Accessibility</a>
+                    <a href="#" class="hover:underline">Ads info</a>
+                    <a href="#" class="hover:underline">More</a>
+                </div>
+                
+                <p class="mt-2">© 2023 AKINLOTAN, Inc.</p>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Bottom Navigation (Mobile) -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 shadow-lg flex justify-around py-3 z-10">
+        <a href="#" class="flex flex-col items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            <span class="text-xs mt-1">Home</span>
+        </a>
+        
+        <a href="#" class="flex flex-col items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <span class="text-xs mt-1">Explore</span>
+        </a>
+        
+        <a href="#" class="flex flex-col items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+            <span class="text-xs mt-1">Notifications</span>
+        </a>
+        
+        <a href="#" class="flex flex-col items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <span class="text-xs mt-1">Messages</span>
+        </a>
+    </nav>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        // Check for saved theme preference or use system preference
+        const savedTheme = localStorage.getItem('theme') || 
+                         (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        html.classList.add(savedTheme);
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            const theme = html.classList.contains('dark') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+        });
+        
+        // Profile Menu Toggle
+        const profileMenu = document.getElementById('profile-menu');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        
+        profileMenu.addEventListener('click', () => {
+            profileDropdown.classList.toggle('hidden');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!profileMenu.contains(e.target) && !profileDropdown.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Post Creation Logic
+        const postContent = document.getElementById('post-content');
+        const uploadImageBtn = document.getElementById('upload-image-btn');
+        const uploadVideoBtn = document.getElementById('upload-video-btn');
+        const mediaUpload = document.getElementById('media-upload');
+        const mediaPreview = document.getElementById('media-preview');
+        const mediaContainer = document.getElementById('media-container');
+        const removeMediaBtn = document.getElementById('remove-media');
+        const postSubmit = document.getElementById('post-submit');
+        
+        let currentMediaType = null;
+        let mediaFile = null;
+        
+        // Enable/disable post button based on content
+        postContent.addEventListener('input', () => {
+            updatePostButtonState();
+        });
+        
+        // Handle image upload button
+        uploadImageBtn.addEventListener('click', () => {
+            currentMediaType = 'image';
+            mediaUpload.setAttribute('accept', 'image/*');
+            mediaUpload.click();
+        });
+        
+        // Handle video upload button
+        uploadVideoBtn.addEventListener('click', () => {
+            currentMediaType = 'video';
+            mediaUpload.setAttribute('accept', 'video/*');
+            mediaUpload.click();
+        });
+        
+        // Handle media selection
+        mediaUpload.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                mediaFile = e.target.files[0];
+                showMediaPreview();
+            }
+        });
+        
+        // Remove media preview
+        removeMediaBtn.addEventListener('click', () => {
+            mediaFile = null;
+            mediaPreview.classList.add('hidden');
+            mediaContainer.innerHTML = '';
+            updatePostButtonState();
+        });
+        
+        // Show media preview
+        function showMediaPreview() {
+            mediaPreview.classList.remove('hidden');
+            mediaContainer.innerHTML = '';
+            
+            if (currentMediaType === 'image') {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(mediaFile);
+                img.alt = 'User uploaded image for post';
+                img.classList.add('w-full', 'h-auto', 'max-h-96', 'object-cover');
+                mediaContainer.appendChild(img);
+            } else if (currentMediaType === 'video') {
+                const video = document.createElement('video');
+                video.src = URL.createObjectURL(mediaFile);
+                video.controls = true;
+                video.classList.add('w-full', 'h-auto', 'max-h-96');
+                mediaContainer.appendChild(video);
+            }
+            
+            updatePostButtonState();
+        }
+        
+        // Update post button state
+        function updatePostButtonState() {
+            if (postContent.value.trim() !== '' || mediaFile !== null) {
+                postSubmit.disabled = false;
+            } else {
+                postSubmit.disabled = true;
+            }
+        }
+        
+        // Handle post submission (mock functionality)
+        postSubmit.addEventListener('click', () => {
+            const content = postContent.value.trim();
+            
+            if (content === '' && mediaFile === null) return;
+            
+            // In a real app, you would send this data to a server
+            // For now, we'll simulate adding a new post to the feed
+            
+            // Create new post element
+            const postElement = document.createElement('div');
+            postElement.className = 'post-card bg-white dark:bg-slate-900 rounded-lg shadow-md p-4 transition-all duration-200';
+            postElement.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/703f7edc-003c-4e36-abc7-213cb6864a66.png" alt="Current user profile picture thumbnail" class="w-10 h-10 rounded-full">
+                    
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-semibold">Oluwaseun Akinlotan</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">@seunakin • Just now</p>
+                            </div>
+                            
+                            <button class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0z
